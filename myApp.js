@@ -16,30 +16,52 @@ const personSchema = new Schema({
 
 Person = mongoose.model("Person", personSchema);
 
-var NewPerson = new Person({
-  name: "Edward",
-  age: 43, 
-  favoriteFoods : ["Red Hot Chilly Peppers"]
-  });
 
- 
-NewPerson.save();
 
 const createAndSavePerson = (done) => {
    //done(null /*, data*/);
-  done(null, NewPerson);
+  var NewPerson = new Person({
+    name: "Edward",
+    age: 43, 
+    favoriteFoods : ["Red Hot Chilly Peppers"]
+  });
+  
+  NewPerson.save(function(err, data) {
+    if(err) return console.error(err);
+    done(null, data);
+  });
 };
 
+var arrayOfPeople = [
+  {name: "Frankie", age: 74, favoriteFoods: ["Del Taco"]},
+  {name: "Sol", age: 76, favoriteFoods: ["roast chicken"]},
+  {name: "Robert", age: 78, favoriteFoods: ["wine"]}
+];
 const createManyPeople = (arrayOfPeople, done) => {
-  done(null /*, data*/);
+
+  Person.create(arrayOfPeople, function(err, people){
+    if(err) return console.error(err);
+    done(null, people);
+  });
+ 
 };
 
 const findPeopleByName = (personName, done) => {
-  done(null /*, data*/);
+ 
+  Person.find({name : personName}, function(err, people){
+    if(err) return console.error(err);
+    done(null, people)
+  });
+  
+  //done(null, Person.find(personName));
 };
 
 const findOneByFood = (food, done) => {
-  done(null /*, data*/);
+  Person.findOne({favoriteFoods : food}, function(err, people){
+      if(err) return console.error(err);
+      if(people.favoriteFoods.includes(food))done(null, people);
+  });
+  //done(null /*, data*/);
 };
 
 const findPersonById = (personId, done) => {
