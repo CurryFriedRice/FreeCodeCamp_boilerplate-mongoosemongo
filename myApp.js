@@ -16,12 +16,18 @@ const personSchema = new Schema({
 
 Person = mongoose.model("Person", personSchema);
 
+var NewPerson = new Person({
+  name: "Edward",
+  age: 43, 
+  favoriteFoods : ["Red Hot Chilly Peppers"]
+  });
 
+ 
+NewPerson.save();
 
 const createAndSavePerson = (done) => {
-  let LocalPesron = mongoose.model("Person", personSchema);
-  LocalPerson.n
-  done(null /*, data*/);
+   //done(null /*, data*/);
+  done(null, NewPerson);
 };
 
 const createManyPeople = (arrayOfPeople, done) => {
