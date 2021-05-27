@@ -65,35 +65,62 @@ const findOneByFood = (food, done) => {
 };
 
 const findPersonById = (personId, done) => {
-  done(null /*, data*/);
+  Person.findById({_id : personId}, function(err, people){
+  if(err) return console.error(err);
+  done(null, people);
+  });
+  
+    //done(null, /*, data*/);
 };
 
 const findEditThenSave = (personId, done) => {
   const foodToAdd = "hamburger";
-
-  done(null /*, data*/);
+  Person.findById({_id : personId}, function(err, people){
+    if(err) return console.error(err);
+    people.favoriteFoods.push(foodToAdd);
+    people.save(function(err, updatedPerson){
+      if(err) console.error(err);
+      done(null, updatedPerson);
+    });
+  });
 };
 
 const findAndUpdate = (personName, done) => {
   const ageToSet = 20;
 
-  done(null /*, data*/);
+  Person.findOneAndUpdate({name : personName}, {age : ageToSet}, {new : true}, function(err, updatedPerson){
+      if(err) return console.error(err);
+      done(null, updatedPerson);
+  });
+  
+  //done(null /*, data*/);
 };
 
 const removeById = (personId, done) => {
-  done(null /*, data*/);
+  Person.findByIdAndRemove(personId, function(err, successful){
+    if(err) return console.error(err);
+    done(null, successful);
+  });
 };
 
 const removeManyPeople = (done) => {
   const nameToRemove = "Mary";
-
-  done(null /*, data*/);
+  Person.remove( {name: nameToRemove}, function(err, successful){
+    if(err) return console.error(err);
+    done(null, successful);
+  });
 };
 
 const queryChain = (done) => {
   const foodToSearch = "burrito";
-
-  done(null /*, data*/);
+  Person.find({favoriteFoods : foodToSearch})
+  .sort({name : 1 })
+  .limit(2)
+  .select({age : 0})
+  .exec(function(err, people){ 
+    if(err) return console.error(err);
+    done( null, people)});
+  //done(null /*, data*/);
 };
 
 
